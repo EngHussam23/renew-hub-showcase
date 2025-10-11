@@ -6,63 +6,64 @@ import {
   Clock,
   Users,
   ArrowRight,
+  DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import heroSolar from "@/assets/hero-solar.jpg";
-import heroWind from "@/assets/hero-wind.jpg";
-import heroLab from "@/assets/hero-lab.jpg";
+import classroom from "@/assets/classroom.jpg";
 
 const slides = [
   {
     id: 1,
     image: heroSolar,
-    title: "Master Solar Energy Engineering",
-    subtitle:
-      "Comprehensive courses in photovoltaic systems and solar technology",
+    title: "Limited Time Offer",
+    side_title: "Top Courses",
+    side_sub: "Hands‑on training in solar, wind & storage. Offer ends soon.",
+    subtitle: "Save Up to 60% on Top Renewable Energy Courses.",
   },
   {
     id: 2,
-    image: heroWind,
-    title: "Wind Energy Solutions",
-    subtitle: "Advanced training in wind turbine design and implementation",
+    image: classroom,
+    title: "What Makes Us Special?",
+    side_title: "Our Features",
+    side_sub: "A quick look at what we offer",
+    subtitle:
+      "Discover why Professional Institute is your best renewable energy engineering career advancement.",
   },
-  {
-    id: 3,
-    image: heroLab,
-    title: "Green Technology Innovation",
-    subtitle: "Hands-on experience with cutting-edge renewable energy systems",
-  },
+];
+
+const features = [
+  { id: 1, title: "Hands‑on Labs", icon: BookOpen },
+  { id: 2, title: "Expert Instructors", icon: Users },
+  { id: 3, title: "Flexible Learning", icon: Clock },
+  { id: 4, title: "Scholarships & Discounts", icon: DollarSign },
 ];
 
 const featuredCourses = [
   {
     id: 1,
-    title: "Solar Panel Installation & Maintenance",
-    description: "Master photovoltaic systems and installation techniques",
-    duration: "12 weeks",
-    students: "150+",
-    image:
-      "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=300&h=200&fit=crop",
+    title: "Mastering Energy Storage Systems Course (MESS) – English Version",
+    description:
+      "A comprehensive program covering technical and practical aspects of energy storage systems.",
+    duration: "6 hours",
+    students: "59+",
+    image: "public/MESS_Course.png",
+    price: "400.00",
+    discountPrice: "80.00",
   },
   {
     id: 2,
-    title: "Wind Turbine Engineering",
-    description: "Advanced wind turbine design and grid integration",
-    duration: "16 weeks",
-    students: "120+",
-    image:
-      "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=300&h=200&fit=crop",
-  },
-  {
-    id: 3,
-    title: "Energy Storage Systems",
-    description: "Battery technologies and energy management systems",
-    duration: "10 weeks",
-    students: "90+",
-    image:
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop",
+    title:
+      "Advanced Solar Water Pumping Design and Installation Course (ASPDI)",
+    description:
+      "In-depth training on solar water pumping design and installation.",
+    duration: "2 hours",
+    students: "50+",
+    image: "public/ASPDI_Course.png",
+    price: "120.00",
+    discountPrice: "34.00",
   },
 ];
 
@@ -76,172 +77,206 @@ export const HeroSection = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const prevSlide = () => {
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () =>
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
 
   return (
     <section className="relative h-screen overflow-hidden">
       {/* Slides */}
-      {slides.map((slide, index) => (
+      <div className="absolute inset-0 overflow-hidden">
         <div
-          key={slide.id}
-          className={`absolute inset-0 transition-transform duration-700 ease-in-out ${
-            index === currentSlide
-              ? "translate-x-0"
-              : index < currentSlide
-              ? "-translate-x-full"
-              : "translate-x-full"
-          }`}
+          className="flex h-full transition-transform duration-700 ease-in-out"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
-          <div
-            className="w-full h-full bg-cover bg-center relative"
-            style={{ backgroundImage: `url(${slide.image})` }}
-          >
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-secondary/90 to-primary/70" />
-
-            {/* Content */}
-            <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-                {/* Left Side - Main Content */}
-                <div className="text-white animate-fade-up">
-                  <div className="mb-4">
-                    <Badge className="gradient-primary text-white mb-4">
-                      Leading Renewable Energy Education
-                    </Badge>
-                  </div>
-                  <h1 className="text-3xl md:text-6xl font-bold mb-4 md:mb-6 leading-tight">
-                    Professional Institute
-                  </h1>
-                  <p className="text-lg md:text-2xl mb-6 md:mb-8 opacity-90 leading-relaxed">
-                    {slide.subtitle}
-                  </p>
-                  <Button
-                    size="lg"
-                    className="gradient-primary text-white hover:scale-105 transition-transform duration-300 px-6 md:px-8 py-4 md:py-6 text-base md:text-lg font-semibold rounded-xl shadow-hero"
-                  >
-                    <ArrowRight className="mr-2 h-5 w-5" />
-                    Explore All Courses
-                  </Button>
-                </div>
-
-                {/* Right Side - Featured Courses */}
+          {slides.map((slide, index) => {
+            return (
+              <div key={slide.id} className="w-full flex-shrink-0">
                 <div
-                  className="animate-fade-up"
-                  style={{ animationDelay: "0.2s" }}
+                  className="w-full h-full bg-cover bg-center relative"
+                  style={{ backgroundImage: `url(${slide.image})` }}
                 >
-                  <div className="mb-4 md:mb-6">
-                    <h2 className="text-xl md:text-3xl font-bold text-white mb-2">
-                      Top Courses
-                    </h2>
-                    <p className="text-sm md:text-base text-white/80">
-                      Most popular renewable energy programs
-                    </p>
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondary/90 to-primary/70" />
 
-                  <div className="space-y-3 md:space-y-4 max-h-80 md:max-h-96 overflow-y-auto pr-2">
-                    {featuredCourses.slice(0, 2).map((course, courseIndex) => (
-                      <Card
-                        key={course.id}
-                        className="bg-white/95 backdrop-blur-sm border-0 shadow-hero hover:shadow-xl transition-all duration-300 hover:-translate-y-1 md:block hidden"
-                        style={{
-                          animationDelay: `${0.3 + courseIndex * 0.1}s`,
-                        }}
+                  <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+                      {/* Left: Main hero content */}
+                      <div className="text-white animate-fade-up">
+                        <div className="mb-4">
+                          <Badge className="gradient-primary text-white mb-4">
+                            Leading Renewable Energy Education
+                          </Badge>
+                        </div>
+                        <h1 className="text-3xl md:text-6xl font-bold mb-4 md:mb-6 leading-tight">
+                          {slide.title}
+                        </h1>
+                        <p className="text-lg md:text-2xl mb-6 md:mb-8 opacity-90 leading-relaxed">
+                          {slide.subtitle}
+                        </p>
+                        <Button
+                          size="lg"
+                          className="gradient-primary text-white hover:scale-105 transition-transform duration-300 px-6 md:px-8 py-4 md:py-6 text-base md:text-lg font-semibold rounded-xl shadow-hero"
+                        >
+                          <ArrowRight className="mr-2 h-5 w-5" /> Explore All
+                          Courses
+                        </Button>
+                      </div>
+
+                      {/* Right: features or featured courses */}
+                      <div
+                        className="animate-fade-up"
+                        style={{ animationDelay: "0.2s" }}
                       >
-                        <CardContent className="p-3 md:p-4">
-                          <div className="flex gap-3 md:gap-4">
-                            <div
-                              className="w-16 md:w-20 h-12 md:h-16 bg-cover bg-center rounded-lg flex-shrink-0"
-                              style={{
-                                backgroundImage: `url(${course.image})`,
-                              }}
-                            />
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-secondary mb-1 line-clamp-1 text-sm md:text-base">
-                                {course.title}
-                              </h3>
-                              <p className="text-xs md:text-sm text-muted-foreground mb-2 line-clamp-1 md:line-clamp-2">
-                                {course.description}
-                              </p>
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2 md:gap-3 text-xs text-muted-foreground">
-                                  <div className="flex items-center">
-                                    <Clock className="h-3 w-3 mr-1" />
-                                    {course.duration}
-                                  </div>
-                                  <div className="flex items-center hidden md:flex">
-                                    <Users className="h-3 w-3 mr-1" />
-                                    {course.students}
-                                  </div>
-                                </div>
+                        <div className="mb-4 md:mb-6">
+                          <h2 className="text-xl md:text-3xl font-bold text-white mb-2">
+                            {slide.side_title}
+                          </h2>
+                          <p className="text-sm md:text-base text-white/80">
+                            {slide.side_sub}
+                          </p>
+                        </div>
+
+                        <div className="space-y-3 md:space-y-4 max-h-80 md:max-h-96 overflow-y-auto pr-2">
+                          {index === 1 ? (
+                            <>
+                              <div className="hidden md:grid grid-cols-2 gap-3">
+                                {features.map((f) => {
+                                  const Icon = f.icon;
+                                  return (
+                                    <div
+                                      key={f.id}
+                                      className="bg-white/95 backdrop-blur-sm border-0 shadow-hero p-3 rounded-lg flex items-center gap-3"
+                                    >
+                                      <div className="w-10 h-10 rounded-md bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                                        <Icon className="h-5 w-5" />
+                                      </div>
+                                      <div className="text-sm font-semibold text-secondary">
+                                        {f.title}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+
+                              <div className="md:hidden space-y-3">
+                                {features.slice(0, 2).map((f) => {
+                                  const Icon = f.icon;
+                                  return (
+                                    <div
+                                      key={f.id}
+                                      className="bg-white/95 backdrop-blur-sm border-0 shadow-hero p-3 rounded-md flex items-center justify-between"
+                                    >
+                                      <div className="flex items-center gap-3">
+                                        <div className="w-10 h-8 bg-primary/10 rounded-md flex items-center justify-center text-primary">
+                                          <Icon className="h-5 w-5" />
+                                        </div>
+                                        <div className="text-sm font-medium">
+                                          {f.title}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+
                                 <Button
                                   size="sm"
-                                  className="gradient-primary text-white text-xs px-2 md:px-3 py-1 h-6 md:h-7"
+                                  className="w-full gradient-primary text-white text-sm py-2"
+                                  aria-label="View all features"
                                 >
-                                  <BookOpen className="mr-1 h-3 w-3" />
-                                  <span className="hidden md:inline">
-                                    Enroll Now
-                                  </span>
-                                  <span className="md:hidden">Enroll</span>
+                                  View All Features
                                 </Button>
                               </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-
-                    {/* Mobile: Show only 1 simplified card */}
-                    <div className="md:hidden space-y-3">
-                      {featuredCourses
-                        .slice(0, 1)
-                        .map((course, courseIndex) => (
-                          <Card
-                            key={course.id}
-                            className="bg-white/95 backdrop-blur-sm border-0 shadow-hero"
-                          >
-                            <CardContent className="p-3">
-                              <div className="flex gap-3">
-                                <div
-                                  className="w-14 h-10 bg-cover bg-center rounded-lg flex-shrink-0"
+                            </>
+                          ) : (
+                            featuredCourses
+                              .slice(0, 2)
+                              .map((course, courseIndex) => (
+                                <Card
+                                  key={course.id}
+                                  className="bg-white/95 backdrop-blur-sm border-0 shadow-hero hover:shadow-xl transition-all duration-300 hover:-translate-y-1 md:block hidden"
                                   style={{
-                                    backgroundImage: `url(${course.image})`,
+                                    animationDelay: `${
+                                      0.3 + courseIndex * 0.1
+                                    }s`,
                                   }}
-                                />
-                                <div className="flex-1 min-w-0">
-                                  <h3 className="font-semibold text-secondary mb-1 line-clamp-1 text-sm">
-                                    {course.title}
-                                  </h3>
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                      <Clock className="h-3 w-3 mr-1" />
-                                      {course.duration}
+                                >
+                                  <CardContent className="p-3 md:p-4">
+                                    <div className="flex gap-3 md:gap-4">
+                                      <div
+                                        className="w-16 md:w-20 h-12 md:h-16 bg-cover bg-center rounded-lg flex-shrink-0"
+                                        style={{
+                                          backgroundImage: `url(${course.image})`,
+                                        }}
+                                      />
+                                      <div className="flex-1 min-w-0">
+                                        <h3 className="font-semibold text-secondary mb-1 line-clamp-1 text-sm md:text-base">
+                                          {course.title}
+                                        </h3>
+                                        <p className="text-xs md:text-sm text-muted-foreground mb-2 line-clamp-1 md:line-clamp-2">
+                                          {course.description}
+                                        </p>
+
+                                        <div className="flex items-center justify-between">
+                                          <div className="flex items-center gap-2 md:gap-3 text-xs text-muted-foreground">
+                                            <div className="flex items-center">
+                                              <Clock className="h-3 w-3 mr-1" />
+                                              {course.duration}
+                                            </div>
+                                            <div className="hidden md:flex items-center">
+                                              <Users className="h-3 w-3 mr-1" />
+                                              {course.students}
+                                            </div>
+                                            <span className="text-lg text-muted-foreground line-through ml-2">
+                                              ${course.price}
+                                            </span>
+                                            <span className="text-lg font-bold text-primary">
+                                              ${course.discountPrice}
+                                            </span>
+                                            <Badge
+                                              className="text-xs"
+                                              variant="destructive"
+                                            >
+                                              {Math.round(
+                                                ((parseFloat(course.price) -
+                                                  parseFloat(
+                                                    course.discountPrice
+                                                  )) /
+                                                  parseFloat(course.price)) *
+                                                  100
+                                              )}
+                                              % OFF
+                                            </Badge>
+                                          </div>
+
+                                          <Button
+                                            size="sm"
+                                            className="gradient-primary text-white text-xs px-2 md:px-3 py-1 h-6 md:h-7"
+                                          >
+                                            <BookOpen className="mr-1 h-3 w-3" />{" "}
+                                            <span className="hidden md:inline">
+                                              Enroll Now
+                                            </span>
+                                            <span className="md:hidden">
+                                              Enroll
+                                            </span>
+                                          </Button>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <Button
-                                      size="sm"
-                                      className="gradient-primary text-white text-xs px-2 py-1 h-6"
-                                    >
-                                      Enroll
-                                    </Button>
-                                  </div>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))}
+                                  </CardContent>
+                                </Card>
+                              ))
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
-      ))}
+      </div>
 
       {/* Navigation Arrows */}
       <button

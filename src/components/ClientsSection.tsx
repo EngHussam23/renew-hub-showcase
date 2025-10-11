@@ -3,39 +3,47 @@ import ecoLogo from "@/assets/Eco_Green_Energy.png";
 import growattLogo from "@/assets/Growatt.png";
 import kacstLogo from "@/assets/KACST.png";
 import nomacLogo from "@/assets/NOMAC.png";
+import schneiderLogo from "@/assets/schneider-electric.png";
+import enelLogo from "@/assets/enel.png";
+import orstedLogo from "@/assets/orsted.png";
+import firstSolarLogo from "@/assets/firstsolar.png";
+import vestasLogo from "@/assets/vestas.png";
+import geLogo from "@/assets/ge.png";
+import siemensLogo from "@/assets/siemens.png";
+import teslaLogo from "@/assets/tesla.png";
 
 const clients = [
   {
     name: "Tesla Energy",
-    logo: "https://logo.clearbit.com/tesla.com",
+    logo: teslaLogo,
   },
   {
     name: "Siemens",
-    logo: "https://logo.clearbit.com/siemens.com",
+    logo: siemensLogo,
   },
   {
     name: "General Electric",
-    logo: "https://logo.clearbit.com/ge.com",
+    logo: geLogo,
   },
   {
     name: "Vestas",
-    logo: "https://logo.clearbit.com/vestas.com",
+    logo: vestasLogo,
   },
   {
     name: "First Solar",
-    logo: "https://logo.clearbit.com/firstsolar.com",
+    logo: firstSolarLogo,
   },
   {
     name: "Orsted",
-    logo: "https://logo.clearbit.com/orsted.com",
+    logo: orstedLogo,
   },
   {
     name: "Enel Green Power",
-    logo: "https://logo.clearbit.com/enel.com",
+    logo: enelLogo,
   },
   {
     name: "Schneider Electric",
-    logo: "https://logo.clearbit.com/schneider-electric.com",
+    logo: schneiderLogo,
   },
   {
     name: "Eco Green Energy",

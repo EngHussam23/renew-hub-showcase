@@ -44,10 +44,10 @@ const courses = [
     duration: "2 hours",
     language: "English",
     level: "All Levels",
-    package: "Diamond",
+    package: "Gold",
     category: "Renewable Energy",
     price: "120.00",
-    discountPrice: "24.00",
+    discountPrice: "34.00",
     lectures: 1,
     capacity: 80,
     currentStudents: 25,
@@ -183,8 +183,6 @@ export const CoursesSection = () => {
         return "bg-slate-400 text-white";
       case "Gold":
         return "bg-yellow-500 text-white";
-      case "Diamond":
-        return "bg-blue-600 text-white";
       default:
         return "bg-primary text-white";
     }
@@ -223,9 +221,9 @@ export const CoursesSection = () => {
                 }`}
               >
                 {category === "Renewable Energy"
-                  ? "Renewable"
+                  ? "Renewable Energy"
                   : category === "Electrical Power"
-                  ? "Electrical"
+                  ? "Electrical Power"
                   : category}
               </Button>
             ))}
@@ -258,7 +256,7 @@ export const CoursesSection = () => {
             <span className="text-xs lg:text-sm font-medium text-muted-foreground px-2 lg:px-3 py-1 lg:py-2 whitespace-nowrap">
               Package:
             </span>
-            {["All", "Bronze", "Silver", "Gold", "Diamond"].map((pkg) => (
+            {["All", "Bronze", "Silver", "Gold"].map((pkg) => (
               <Button
                 key={pkg}
                 variant={packageFilter === pkg ? "default" : "ghost"}
@@ -320,7 +318,6 @@ export const CoursesSection = () => {
                   {/* Price Section */}
                   <div className="flex items-center gap-2 mb-4">
                     <div className="flex items-center">
-                      <DollarSign className="h-4 w-4 text-primary" />
                       <span className="text-2xl font-bold text-primary">
                         ${course.discountPrice}
                       </span>

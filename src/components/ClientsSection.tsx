@@ -1,57 +1,138 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import ecoLogo from "@/assets/Eco_Green_Energy.png";
+import growattLogo from "@/assets/Growatt.png";
+import kacstLogo from "@/assets/KACST.png";
+import nomacLogo from "@/assets/NOMAC.png";
 
 const clients = [
   {
     name: "Tesla Energy",
-    logo: "https://logo.clearbit.com/tesla.com"
+    logo: "https://logo.clearbit.com/tesla.com",
   },
   {
     name: "Siemens",
-    logo: "https://logo.clearbit.com/siemens.com"
+    logo: "https://logo.clearbit.com/siemens.com",
   },
   {
     name: "General Electric",
-    logo: "https://logo.clearbit.com/ge.com"
+    logo: "https://logo.clearbit.com/ge.com",
   },
   {
     name: "Vestas",
-    logo: "https://logo.clearbit.com/vestas.com"
+    logo: "https://logo.clearbit.com/vestas.com",
   },
   {
     name: "First Solar",
-    logo: "https://logo.clearbit.com/firstsolar.com"
+    logo: "https://logo.clearbit.com/firstsolar.com",
   },
   {
     name: "Orsted",
-    logo: "https://logo.clearbit.com/orsted.com"
+    logo: "https://logo.clearbit.com/orsted.com",
   },
   {
     name: "Enel Green Power",
-    logo: "https://logo.clearbit.com/enel.com"
+    logo: "https://logo.clearbit.com/enel.com",
   },
   {
     name: "Schneider Electric",
-    logo: "https://logo.clearbit.com/schneider-electric.com"
-  }
+    logo: "https://logo.clearbit.com/schneider-electric.com",
+  },
+  {
+    name: "Eco Green Energy",
+    logo: ecoLogo,
+  },
+  {
+    name: "Growatt",
+    logo: growattLogo,
+  },
+  {
+    name: "KACST",
+    logo: kacstLogo,
+  },
+  {
+    name: "NOMAC",
+    logo: nomacLogo,
+  },
 ];
 
 export const ClientsSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [visibleIndex, setVisibleIndex] = useState(0);
+  const isInteractingRef = useRef(false);
+
+  const localLogos: Record<string, string> = {
+    "Eco Green Energy": ecoLogo,
+    Growatt: growattLogo,
+    KACST: kacstLogo,
+    NOMAC: nomacLogo,
+  };
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
-    const scroll = () => {
-      if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth / 2) {
+    const totalUniqueWidth = scrollContainer.scrollWidth / 2 || 0;
+
+    const children = Array.from(scrollContainer.children) as HTMLElement[];
+
+    const computeItemFullWidth = () => {
+      const first = children[0];
+      const second = children[1];
+      if (!first) return 1;
+      const rect0 = first.getBoundingClientRect();
+      if (!second) return rect0.width;
+      const rect1 = second.getBoundingClientRect();
+      const gap = rect1.left - rect0.left - rect0.width;
+      return rect0.width + (gap > 0 ? gap : 0);
+    };
+
+    let itemWidth = computeItemFullWidth();
+
+    const updateIndex = () => {
+      if (!scrollContainer) return;
+      const eff = totalUniqueWidth
+        ? scrollContainer.scrollLeft % totalUniqueWidth
+        : scrollContainer.scrollLeft;
+      const idx = Math.round(eff / (itemWidth || 1));
+      setVisibleIndex(idx % clients.length);
+    };
+
+    const scrollStep = () => {
+      if (!scrollContainer || isInteractingRef.current) return;
+      if (scrollContainer.scrollLeft >= totalUniqueWidth) {
         scrollContainer.scrollLeft = 0;
       } else {
         scrollContainer.scrollLeft += 1;
       }
+      updateIndex();
     };
 
-    const interval = setInterval(scroll, 30);
-    return () => clearInterval(interval);
+    const onPointerEnter = () => (isInteractingRef.current = true);
+    const onPointerLeave = () => (isInteractingRef.current = false);
+
+    const interval = setInterval(scrollStep, 30);
+    scrollContainer.addEventListener("scroll", updateIndex, { passive: true });
+    scrollContainer.addEventListener("pointerenter", onPointerEnter);
+    scrollContainer.addEventListener("pointerleave", onPointerLeave);
+    scrollContainer.addEventListener("touchstart", onPointerEnter, {
+      passive: true,
+    });
+    scrollContainer.addEventListener("touchend", onPointerLeave);
+
+    // initial compute
+    setTimeout(() => {
+      itemWidth = computeItemFullWidth();
+      updateIndex();
+    }, 50);
+
+    return () => {
+      clearInterval(interval);
+      scrollContainer.removeEventListener("scroll", updateIndex);
+      scrollContainer.removeEventListener("pointerenter", onPointerEnter);
+      scrollContainer.removeEventListener("pointerleave", onPointerLeave);
+      scrollContainer.removeEventListener("touchstart", onPointerEnter);
+      scrollContainer.removeEventListener("touchend", onPointerLeave);
+    };
   }, []);
 
   return (
@@ -63,17 +144,17 @@ export const ClientsSection = () => {
             Our Clients & Partners
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Trusted by leading renewable energy companies and organizations worldwide
-            for professional development and training programs.
+            Trusted by leading renewable energy companies and organizations
+            worldwide for professional development and training programs.
           </p>
         </div>
 
         {/* Logos Carousel */}
         <div className="relative overflow-hidden">
-          <div 
+          <div
             ref={scrollRef}
             className="flex space-x-12 overflow-hidden whitespace-nowrap animate-slide-in"
-            style={{ width: 'calc(200% + 3rem)' }}
+            style={{ width: "calc(200% + 3rem)" }}
           >
             {/* First set of logos */}
             {clients.map((client, index) => (
@@ -82,22 +163,27 @@ export const ClientsSection = () => {
                 className="flex-shrink-0 w-32 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
               >
                 <img
-                  src={client.logo}
+                  src={localLogos[client.name] ?? client.logo}
                   alt={client.name}
-                  className="max-w-full max-h-full object-contain filter brightness-0"
+                  loading="lazy"
+                  className="max-w-full max-h-full object-contain"
                   onError={(e) => {
                     // Fallback to text if logo fails to load
                     const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
+                    target.style.display = "none";
                     const parent = target.parentElement;
                     if (parent) {
-                      parent.innerHTML = `<div class="text-sm font-semibold text-muted-foreground text-center px-4">${client.name}</div>`;
+                      const fallback = document.createElement("div");
+                      fallback.className =
+                        "text-sm font-semibold text-muted-foreground text-center px-4";
+                      fallback.textContent = client.name;
+                      parent.appendChild(fallback);
                     }
                   }}
                 />
               </div>
             ))}
-            
+
             {/* Duplicate set for seamless loop */}
             {clients.map((client, index) => (
               <div
@@ -105,45 +191,71 @@ export const ClientsSection = () => {
                 className="flex-shrink-0 w-32 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
               >
                 <img
-                  src={client.logo}
+                  src={localLogos[client.name] ?? client.logo}
                   alt={client.name}
-                  className="max-w-full max-h-full object-contain filter brightness-0"
+                  loading="lazy"
+                  className="max-w-full max-h-full object-contain"
                   onError={(e) => {
-                    // Fallback to text if logo fails to load
                     const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
+                    target.style.display = "none";
                     const parent = target.parentElement;
                     if (parent) {
-                      parent.innerHTML = `<div class="text-sm font-semibold text-muted-foreground text-center px-4">${client.name}</div>`;
+                      const fallback = document.createElement("div");
+                      fallback.className =
+                        "text-sm font-semibold text-muted-foreground text-center px-4";
+                      fallback.textContent = client.name;
+                      parent.appendChild(fallback);
                     }
                   }}
                 />
               </div>
             ))}
           </div>
-          
+
           {/* Gradient Overlays */}
           <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-background to-transparent z-10" />
           <div className="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-background to-transparent z-10" />
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-16">
-          {[
-            { number: "500+", label: "Corporate Partners" },
-            { number: "50+", label: "Countries Served" },
-            { number: "10,000+", label: "Professionals Trained" },
-            { number: "95%", label: "Satisfaction Rate" }
-          ].map((stat, index) => (
-            <div key={index} className="text-center animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="text-4xl md:text-5xl font-bold gradient-primary bg-clip-text text-transparent mb-2">
-                {stat.number}
+        {/* Business Metrics */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+            <div className="bg-white/5 rounded-lg px-4 py-3">
+              <div className="text-sm text-muted-foreground">
+                Enterprise Partners
               </div>
-              <div className="text-muted-foreground font-medium">
-                {stat.label}
+              <div className="text-2xl md:text-3xl font-bold">500+</div>
+            </div>
+            <div className="bg-white/5 rounded-lg px-4 py-3">
+              <div className="text-sm text-muted-foreground">
+                Countries Reached
+              </div>
+              <div className="text-2xl md:text-3xl font-bold">50+</div>
+            </div>
+          </div>
+
+          <div className="hidden md:flex justify-center">
+            <div className="text-center">
+              <div className="text-sm text-muted-foreground">Programs</div>
+              <div className="text-3xl font-bold">120+</div>
+              <div className="text-sm text-muted-foreground">
+                (Short courses, Certifications)
               </div>
             </div>
-          ))}
+          </div>
+
+          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 justify-end">
+            <div className="bg-white/5 rounded-lg px-4 py-3">
+              <div className="text-sm text-muted-foreground">
+                Professionals Trained
+              </div>
+              <div className="text-2xl md:text-3xl font-bold">10,000+</div>
+            </div>
+            <div className="bg-white/5 rounded-lg px-4 py-3">
+              <div className="text-sm text-muted-foreground">Satisfaction</div>
+              <div className="text-2xl md:text-3xl font-bold">95%</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

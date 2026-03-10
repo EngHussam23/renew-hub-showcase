@@ -12,7 +12,19 @@ import geLogo from "@/assets/ge.png";
 import siemensLogo from "@/assets/siemens.png";
 import teslaLogo from "@/assets/tesla.png";
 
-const clients = [
+/**
+ * Client data structure for company logos and information
+ */
+interface Client {
+  name: string;
+  logo: string;
+}
+
+/**
+ * List of client companies with their logos
+ * All logos are imported as local assets for better performance and reliability
+ */
+const clients: Client[] = [
   {
     name: "Tesla Energy",
     logo: teslaLogo,
@@ -63,17 +75,22 @@ const clients = [
   },
 ];
 
+/**
+ * ClientsSection Component
+ *
+ * Displays a scrolling carousel of client logos with business metrics.
+ * Features:
+ * - Auto-scrolling carousel with manual scroll support
+ * - Seamless infinite loop
+ * - Pause on hover/touch interaction
+ * - Visual index counter
+ * - Business metrics display
+ * - Responsive design
+ */
 export const ClientsSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [visibleIndex, setVisibleIndex] = useState(0);
   const isInteractingRef = useRef(false);
-
-  const localLogos: Record<string, string> = {
-    "Eco Green Energy": ecoLogo,
-    Growatt: growattLogo,
-    KACST: kacstLogo,
-    NOMAC: nomacLogo,
-  };
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
@@ -171,7 +188,7 @@ export const ClientsSection = () => {
                 className="flex-shrink-0 w-32 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
               >
                 <img
-                  src={localLogos[client.name] ?? client.logo}
+                  src={client.logo}
                   alt={client.name}
                   loading="lazy"
                   className="max-w-full max-h-full object-contain"
@@ -199,7 +216,7 @@ export const ClientsSection = () => {
                 className="flex-shrink-0 w-32 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
               >
                 <img
-                  src={localLogos[client.name] ?? client.logo}
+                  src={client.logo}
                   alt={client.name}
                   loading="lazy"
                   className="max-w-full max-h-full object-contain"

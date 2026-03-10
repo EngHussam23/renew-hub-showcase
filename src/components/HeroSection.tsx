@@ -14,7 +14,46 @@ import { Badge } from "@/components/ui/badge";
 import heroSolar from "@/assets/hero-solar.jpg";
 import classroom from "@/assets/classroom.jpg";
 
-const slides = [
+/**
+ * Slide data structure for hero carousel
+ */
+interface Slide {
+  id: number;
+  image: string;
+  title: string;
+  side_title: string;
+  side_sub: string;
+  subtitle: string;
+}
+
+/**
+ * Feature data structure for features display
+ */
+interface Feature {
+  id: number;
+  title: string;
+  icon: React.ComponentType<{ className?: string }>; // Lucide icon component
+}
+
+/**
+ * Course data structure for featured courses
+ */
+interface Course {
+  id: number;
+  title: string;
+  description: string;
+  duration: string;
+  students: string;
+  image: string;
+  price: string;
+  discountPrice: string;
+}
+
+/**
+ * Hero slides configuration
+ * Contains the main content for each slide in the hero carousel
+ */
+const slides: Slide[] = [
   {
     id: 1,
     image: heroSolar,
@@ -34,14 +73,22 @@ const slides = [
   },
 ];
 
-const features = [
+/**
+ * Institute features for display on slide 2
+ * Shows key selling points as compact cards
+ */
+const features: Feature[] = [
   { id: 1, title: "Hands‑on Labs", icon: BookOpen },
   { id: 2, title: "Expert Instructors", icon: Users },
   { id: 3, title: "Flexible Learning", icon: Clock },
   { id: 4, title: "Scholarships & Discounts", icon: DollarSign },
 ];
 
-const featuredCourses = [
+/**
+ * Featured courses for display on slide 1
+ * Showcases popular courses with pricing and enrollment info
+ */
+const featuredCourses: Course[] = [
   {
     id: 1,
     title: "Mastering Energy Storage Systems Course (MESS) – English Version",
@@ -67,6 +114,21 @@ const featuredCourses = [
   },
 ];
 
+/**
+ * HeroSection Component
+ *
+ * Full-screen hero carousel with two slides:
+ * - Slide 1: Course promotion with featured courses sidebar
+ * - Slide 2: Features showcase with mini feature cards
+ *
+ * Features:
+ * - Smooth horizontal sliding animation
+ * - Auto-advance every 5 seconds
+ * - Manual navigation (arrows + dots)
+ * - Responsive design (desktop/mobile)
+ * - Dynamic pricing calculations
+ * - Background image support
+ */
 export const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
